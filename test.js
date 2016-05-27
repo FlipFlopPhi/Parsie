@@ -25,18 +25,51 @@ function getAttribute(e, attribute) {
 function isElement(selector, e) {
 	if (selector == null)
 		return false;
-	if (e.id != "" && selector.indexOf(e.id) > -1)
+	if (e.id != "" && selectorContains(selector,'#'+e.id))
 		return true;
 	for(var i=0; i<e.classList.length; i++) {
 		var className = e.classList.item(i);
-		if (selector.indexOf(className) > -1) {
+		if (selectorContains(selector,"."+className)) {
 			return true;
 		}
 	}
 	return false;
 }
 
-function parseMargin(e, margin) {
+function selectorContains(selector, s) {
+	var str = String(selector);
+	var pre = 0;
+	while(true) {
+		str = str.substr(pre,str.length);
+		pre = str.indexOf(s);
+		if (pre <= -1) 
+			return false;
+		//if (pre != 0 && str.chatAt(pre-1)!=',' && str.chatAt(pre-1)!=' ')
+		//	continue;
+		var i=s.length;
+		while(pre+i <= str.length) {
+			if(pre+i == str.length ||str.charAt(pre+i)==',')
+				return true;
+			if(str.charAt(pre+i)==' '){
+				i++;
+				continue;
+			}
+			break;
+		}
+		while(pre+i < str.length) {
+			if(str.charAt(pre+i)!=',') {
+				i++;
+				continue;
+			}
+			i++;
+			break;
+		}
+		pre = pre + i;
+	}
+	return false;
+}
+
+function parseLength(e, margin) {
 	if (margin.length < 2)
 		return 0;
 	if (margin.substring(margin.length-1,margin.length) == '%') {
@@ -111,7 +144,6 @@ function scanElement(e, pAlign, x, y) {
 	}
 	if (wasMoved)
 		return {moved: true};
-	out[4]+= " " + position;
 	//retrieving the objects total width and height:
 	out[0] = e.offsetWidth;
 	out[1] = e.offsetHeight;
@@ -120,24 +152,23 @@ function scanElement(e, pAlign, x, y) {
 	//out[4] = e.id;
 	//retrieving the objects left and top margin, if they exist
 	var str = getAttribute(e,'marginLeft');
-	out[2] = parseMargin(e,str);
+	out[2] = parseLength(e,str);
 	str = getAttribute(e,'marginTop');
-	out[3] = parseMargin(e,str);
+	out[3] = parseLength(e,str);
 	
 	
 	
 	//Calculate the x and y with which the element is placed in its parent.
 	var align = getAttribute(e,'alignSelf');
-	if (align == 'auto') {
+	if (align == 'auto' || align == '') {
 		align = pAlign;
 	}
 	str = getAttribute(e,'margin');
 	if (str.indexOf('auto') > -1) {
 		out[2] = (e.parentElement.offsetWidth - out[0])/2;
-	}
-	if (align == 'center') {
+	} else if (align == 'center') {
 		out[2] = (e.parentElement.offsetWidth - out[0])/2 + out[2];
-		out[3] = (e.parentElement.offsetHeight - out[1])/2 + out[3];
+		//out[3] = (e.parentElement.offsetHeight - out[1])/2 + out[3];
 	}
 	if (getAttribute(e,'cssFloat') == 'right') {
 		out[2] = out[2] + (e.parentElement.offsetWidth - out[0]);
@@ -147,6 +178,9 @@ function scanElement(e, pAlign, x, y) {
 		out[3] += y;
 	//TODO parse left and top attributes
 	
+	var tAlign = getAttribute(e,'textAlign');
+	if (tAlign != '')
+		align = tAlign;
 	var i = 0;
 	var totalX = 0;
 	var totalY = 0;

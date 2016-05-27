@@ -20,7 +20,7 @@ def readAddresses(fileLocation="list.txt"):
 def prune(tree):
     if (tree==[]):
         return []
-    if (tree[0]==0 or tree[1]==0):
+    if (tree[0]==0 and tree[1]==0):
         return []
     ptree = []
     for x in range(0,6):
