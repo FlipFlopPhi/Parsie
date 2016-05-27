@@ -1,0 +1,9 @@
+.settings/
+/gen/
+/lib/
+/bin/
+.project
+.classpath
+file.pdf
+html.html
+debug.log
