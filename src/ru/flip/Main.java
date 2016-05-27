@@ -46,7 +46,7 @@ public class Main {
 			e.printStackTrace();
 		}
         System.out.println(trees.size() +" trees have been loaded in.");
-        showTreeInBrowser(trees.get(1),"google", false);
+        showTreeInBrowser(trees.get(0),"google", false);
         
         Comparer comp = new LooseEditComparer();
         /*block: {
