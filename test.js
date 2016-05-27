@@ -176,6 +176,20 @@ function scanElement(e, pAlign, x, y) {
 	
 	if (position!='absolute')
 		out[3] += y;
+	else {
+		var pos = getAttribute(e,'left');
+		if (pos != "")
+			out[2] += parseLength(e, pos);
+		pos = getAttribute(e,'right');
+		if (pos != "")
+			out[2] -= parseLength(e,pos);
+		pos = getAttribute(e,'top');
+		if (pos != "")
+			out[3] += parseLength(e,pos);
+		pos = getAttribute(e,'bottom');
+		if (pos != "")
+			out[3] -= parseLength(e,pos);
+	}
 	//TODO parse left and top attributes
 	
 	var tAlign = getAttribute(e,'textAlign');
