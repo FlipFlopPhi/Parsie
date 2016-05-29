@@ -31,7 +31,7 @@ public class Main {
 			while((s = tr.readLine())!= null) {
 				if (s.substring(0, 2).equals("$<")) {
 					String name = s.substring(2,s.length()-1);
-					System.out.println("Tree with name:\n  "+name+"\nfound.  " + trees.size());
+					System.out.println("Tree with name:\n  "+name+"\nfound.");
 					DivTree tree = new DivTree(name);
 					tree.addRoot(parseElement(tr, 0));
 					trees.add(tree);
@@ -46,7 +46,6 @@ public class Main {
 			e.printStackTrace();
 		}
         System.out.println(trees.size() +" trees have been loaded in.");
-        showTreeInBrowser(trees.get(0),"google", false);
         
         Comparer comp = new LooseEditComparer();
         /*block: {
@@ -62,7 +61,7 @@ public class Main {
         DistanceMap map = new DistanceMap(trees, comp);
         System.out.println("Distances between the trees have been calculated.");
         // System.out.println(comp.getDistance(trees.get(0), comp.createAverage(trees.get(0),1,trees.get(0),1)));
-        Clusterer clusterAlgorithm = new ClustererKMeans(map, 4, 15, comp);
+        Clusterer clusterAlgorithm = new ClustererKMeans(map, 7, 15, comp);
         clusterAlgorithm.cluster();
         System.out.println("Trees have been succesfully clustered.");
         clusterAlgorithm.printClusters();
@@ -77,19 +76,8 @@ public class Main {
         	showTreeInBrowser(average, ""+i, false);
         }
         
-        /*
         map.printPairs();
         map.printClosestPair();
-        Pair<DivTree> pair = map.findClosestPair();
-        File site0 = new File("gen/site0.html");
-        pair.element0.toHTML(site0);
-        try {
-        	Desktop.getDesktop().browse(new URI(pair.element0.getAddress()));
-			Desktop.getDesktop().browse(site0.toURI());
-		} catch (IOException | URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
         //map.cluster();
         //map.printPairs();
 		//System.out.println(map.getDistance(trees.get(0), trees.get(1)));
@@ -120,7 +108,7 @@ public class Main {
 		int nrOfChildren;
 		while(s.charAt(end)!=':')
 			end++;
-		System.out.println(s.substring(pre, end));
+		//System.out.println(s.substring(pre, end));
 		nrOfChildren = Integer.parseInt(s.substring(pre, end));
 		Element element = new Element(param[0],param[1],param[2],param[3],name,nrOfChildren);
 		for(int i=0; i<nrOfChildren; i++)

@@ -1,9 +1,10 @@
 function inlineCSS(e) {
 	if (e.id != "" || e.classList.length > 0) {
 		for (var i=document.styleSheets.length - 1; i>=0; i--) {
+			if (document.styleSheets[i].cssRules == null) continue;
 			for (var j=document.styleSheets[i].cssRules.length - 1; j>=0; j--) {
 				if (document.styleSheets[i].cssRules[j] == null) continue;
-				var selector = String(document.styleSheets[i].cssRules[j].selectorText);
+				var selector = document.styleSheets[i].cssRules[j].selectorText;
 				if (isElement(selector, e)) {
 					var style;
 					if ('style' in document.styleSheets[i].cssRules[j]) {
@@ -29,33 +30,9 @@ function inlineCSS(e) {
 
 function getAttribute(e, attribute) {
 	var att = e.style[attribute];
-	if (att != "" && att != null)
+	if (att != null)
 		return att;
-	
-	if(e.id == "" && e.className == "")
-		return "";
-	/*for (var i=document.styleSheets.length - 1; i>=0; i--) {
-		for (var j=document.styleSheets[i].cssRules.length - 1; j>=0; j--) {
-			if (document.styleSheets[i].cssRules[j] == null) continue;
-			var selector = String(document.styleSheets[i].cssRules[j].selectorText);
-			if (isElement(selector, e)) {
-				if ('style' in document.styleSheets[i].cssRules[j])
-					att = document.styleSheets[i].cssRules[j].style[attribute];
-				else
-					att = "";
-				if (att != "" && att != null)
-					return att;
-			}
-		}
-	}*/
 	return "";
-}
-
-function getComputedVal(compStyle, attribute) {
-	var out = compStyle.getPropertyValue(compStyle, attribute);
-	if (out == null)
-		return '';
-	return out;
 }
 
 function isElement(selector, e) {
@@ -148,13 +125,11 @@ function getElementLocation(e, attribute) {
 }
 
 function scanElement(e, pAlign, x, y) {
-	
 	var out = [];
 	var wasMoved = false;
 	out[4] = "";
 	var position = getAttribute(e,'position');
-	out[4] = e.id + " | " + e.className;
-	//out[4] = getElementLocation(e,'position');
+	//out[4] = e.id + " | " + e.className;
 	if (e.parentElement != null) {
 		switch (position) {
 			case '':
@@ -178,21 +153,21 @@ function scanElement(e, pAlign, x, y) {
 				break;
 		}
 	}
+	
 	if (wasMoved)
 		return {moved: true};
 	//retrieving the objects total width and height:
 	out[0] = e.offsetWidth;
 	out[1] = e.offsetHeight;
 	
-	//retrieving the elements name
-	//out[4] = e.id;
 	//retrieving the objects left and top margin, if they exist
 	var str = getAttribute(e,'marginLeft');
 	out[2] = parseLength(e,str);
 	str = getAttribute(e,'marginTop');
 	if (e.previousElementSibling != null) {
-		var str1 = getAttribute(e.previousElementSibling,'marginBottom');
-		out[3] = Math.max(parseLength(e,str),parseLength(e.previousElementSibling,str1));
+		//var str1 = getAttribute(e.previousElementSibling,'marginBottom');
+		//out[3] = Math.max(parseLength(e,str),parseLength(e.previousElementSibling,str1));
+		out[3] = 0;
 	} else
 		out[3] = parseLength(e,str);
 	
@@ -203,6 +178,7 @@ function scanElement(e, pAlign, x, y) {
 	if (align == 'auto' || align == '') {
 		align = pAlign;
 	}
+	
 	str = getAttribute(e,'margin');
 	if (str.indexOf('auto') > -1) {
 		out[2] = (e.parentElement.offsetWidth - out[0])/2;
@@ -230,7 +206,6 @@ function scanElement(e, pAlign, x, y) {
 		if (pos != "")
 			out[3] -= parseLength(e,pos);
 	}
-	//TODO parse left and top attributes
 	
 	var tAlign = getAttribute(e,'textAlign');
 	if (tAlign != '')
@@ -239,7 +214,7 @@ function scanElement(e, pAlign, x, y) {
 	var totalX = 0;
 	var totalY = 0;
 	e.normalize;
-	while(i< e.childElementCount) {
+	while(i< e.childElementCount && e.children!=null) {
 		var scan = scanElement((e.children)[i], align, totalX, totalY);
 		if (scan.moved == false) {
 			out[6+i] = scan.element;
@@ -249,7 +224,7 @@ function scanElement(e, pAlign, x, y) {
 			i = i + 1;
 		}
 	}
-	out[5] = e.childElementCount;
+	out[5] = i;
 	var newOffX = 0;
 	var newOffY = 0;
 	if (position != 'absolute') {
@@ -261,7 +236,7 @@ function scanElement(e, pAlign, x, y) {
 
 var elem;
 elem = document.body;
-inlineCSS(elem);
+//inlineCSS(elem);
 elem.style.position = 'relative';
 var out = scanElement(elem, "stretch", 0, 0);
 out.element;
