@@ -7,13 +7,14 @@ function inlineCSS(e) {
 				if (isElement(selector, e)) {
 					var style;
 					if ('style' in document.styleSheets[i].cssRules[j]) {
-						style = document.styleSheets[i].cssRules[j].style;
-						for(var k=0; k<style.length; k++) {
-							var property = style[k];
-							if (e.style.getPropertyValue(property) == "" || e.style.getPropertyValue(property) == 0) {
-								e.style.setProperty(property, style.getPropertyValue(property));
-							}
-						}
+						style = document.styleSheets[i].cssRules[j].style.cssText;
+						if (style.charAt(style.length-1)!= ';')
+							style += ';';
+						var oldStyle = '';
+						if (e.hasAttribute('style'))
+							oldStyle = e.getAttribute('style');
+						style += oldStyle;
+						e.setAttribute('style',style);
 					}
 				}
 			}
@@ -33,7 +34,7 @@ function getAttribute(e, attribute) {
 	
 	if(e.id == "" && e.className == "")
 		return "";
-	for (var i=document.styleSheets.length - 1; i>=0; i--) {
+	/*for (var i=document.styleSheets.length - 1; i>=0; i--) {
 		for (var j=document.styleSheets[i].cssRules.length - 1; j>=0; j--) {
 			if (document.styleSheets[i].cssRules[j] == null) continue;
 			var selector = String(document.styleSheets[i].cssRules[j].selectorText);
@@ -46,7 +47,7 @@ function getAttribute(e, attribute) {
 					return att;
 			}
 		}
-	}
+	}*/
 	return "";
 }
 
