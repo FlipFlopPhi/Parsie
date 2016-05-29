@@ -1,3 +1,31 @@
+function inlineCSS(e) {
+	if (e.id != "" || e.classList.length > 0) {
+		for (var i=document.styleSheets.length - 1; i>=0; i--) {
+			for (var j=document.styleSheets[i].cssRules.length - 1; j>=0; j--) {
+				if (document.styleSheets[i].cssRules[j] == null) continue;
+				var selector = String(document.styleSheets[i].cssRules[j].selectorText);
+				if (isElement(selector, e)) {
+					var style;
+					if ('style' in document.styleSheets[i].cssRules[j]) {
+						style = document.styleSheets[i].cssRules[j].style;
+						for(var k=0; k<style.length; k++) {
+							var property = style[k];
+							if (e.style.getPropertyValue(property) == "" || e.style.getPropertyValue(property) == 0) {
+								e.style.setProperty(property, style.getPropertyValue(property));
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	for(var i = 0; i < e.childElementCount; i++) {
+		inlineCSS(e.children[i]);
+	}
+}
+
+
 function getAttribute(e, attribute) {
 	var att = e.style[attribute];
 	if (att != "" && att != null)
@@ -20,6 +48,13 @@ function getAttribute(e, attribute) {
 		}
 	}
 	return "";
+}
+
+function getComputedVal(compStyle, attribute) {
+	var out = compStyle.getPropertyValue(compStyle, attribute);
+	if (out == null)
+		return '';
+	return out;
 }
 
 function isElement(selector, e) {
@@ -154,7 +189,11 @@ function scanElement(e, pAlign, x, y) {
 	var str = getAttribute(e,'marginLeft');
 	out[2] = parseLength(e,str);
 	str = getAttribute(e,'marginTop');
-	out[3] = parseLength(e,str);
+	if (e.previousElementSibling != null) {
+		var str1 = getAttribute(e.previousElementSibling,'marginBottom');
+		out[3] = Math.max(parseLength(e,str),parseLength(e.previousElementSibling,str1));
+	} else
+		out[3] = parseLength(e,str);
 	
 	
 	
@@ -198,6 +237,7 @@ function scanElement(e, pAlign, x, y) {
 	var i = 0;
 	var totalX = 0;
 	var totalY = 0;
+	e.normalize;
 	while(i< e.childElementCount) {
 		var scan = scanElement((e.children)[i], align, totalX, totalY);
 		if (scan.moved == false) {
@@ -220,6 +260,7 @@ function scanElement(e, pAlign, x, y) {
 
 var elem;
 elem = document.body;
+inlineCSS(elem);
 elem.style.position = 'relative';
 var out = scanElement(elem, "stretch", 0, 0);
 out.element;
