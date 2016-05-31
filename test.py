@@ -48,14 +48,14 @@ def parseSites(addressList, saveIntermediately=True):
 			#Firefox: 	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0
 			#IExplore: 	Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E; rv:11.0) like Gecko
             Session.open(address,headers = {'Access-Control-Allow-Origin': '*'},user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0")
-            Session.print_to_pdf(path="Page.pdf")
+            #Session.print_to_pdf(path="Page.pdf")
             print "Virtual Window opened"
             print "Preparing website to be parsed"
             #print str(Session.evaluate("var xhr = new XMLHttpRequest(); xhr.open('GET', document.styleSheets[0].href);xhr.send; xhr.readyState")[0])
             Session.evaluate_js_file("pre.js","UTF-8")
             print "Parsing site into tree"
             tree = Session.evaluate_js_file("test.js", "UTF-8")[0]
-            Session.print_to_pdf("file.pdf")
+            #Session.print_to_pdf("file.pdf")
             if (tree == None):
                 print "Tree could not be created."
                 nrOfErrors+=1
@@ -96,8 +96,8 @@ def saveToFile(trees):
         f.write("\n")
     f.close()
 
-addresses = readAddresses("list - Singular.txt")
-#addresses = readAddresses()
+#addresses = readAddresses("list - Singular.txt")
+addresses = readAddresses()
 #["http://www.html5rocks.com/en/tutorials/developertools/part1/","http://sites.cs.queensu.ca/tr/"]
 parseSites(addresses)
  

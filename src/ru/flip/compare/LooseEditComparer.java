@@ -24,8 +24,6 @@ public class LooseEditComparer extends Comparer{
 	 * Calculates how much it would cost to create or remove the given element.
 	 */
 	public double getCost(Element element) {
-		//double cost = this.getVectorDistance(element,
-		//		new Element(0,0,0,0,0));
 		double cost = getVectorDistance(element, element.getParent());
 		Element[] children = element.getChildren();
 		for(Element child : children) 
@@ -34,7 +32,6 @@ public class LooseEditComparer extends Comparer{
 	}
 	
 	public double getDistance(Element branch0, Element branch1){
-		//System.out.println("comparing "+branch0 +" with "+branch1);
 		double delta = 0;
 		delta += getVectorDistance(branch0, branch1);
 		
@@ -101,7 +98,7 @@ public class LooseEditComparer extends Comparer{
 		if(leaves0.length!=0) {
 			for(int i=0; i<leaves0.length; i++) {
 				double min = getCost(leaves0[i]);
-				Element other = leaves0[i];
+				Element other = new Element(0,0,0,0,0);
 				for(int j=0; j<leaves1.length; j++) {
 					double delta = getDistance(leaves0[i],leaves1[j]);
 					if (delta < min) {
@@ -120,7 +117,7 @@ public class LooseEditComparer extends Comparer{
 				(branch0.getWidth()*weight0 + branch1.getWidth()*weight1)/total
 				,(branch0.getHeight()*weight0 + branch1.getHeight()*weight1)/total
 				,(branch0.getMarginLeft()*weight0 + branch1.getMarginLeft()*weight1)/total
-				,(branch0.getMarginTop() + branch1.getMarginTop())/total
+				,(branch0.getMarginTop()*weight0 + branch1.getMarginTop())*weight1/total
 				, newLeaves.size()
 				);
 		for(Element newLeaf : newLeaves) 

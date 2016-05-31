@@ -33,7 +33,7 @@ function loadCSSCors(stylesheet_uri, e) {
 	};
 	xhr.onerror = function() {
 		xhr.onload = xhr.onerror = null;
-		console.error('XHR CORS CSS fail:' + styleURI);
+		console.error('XHR CORS CSS fail:' + stylesheet_uri);
 	};
 	xhr.send();
 }
