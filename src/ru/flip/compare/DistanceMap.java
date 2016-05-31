@@ -46,18 +46,6 @@ public class DistanceMap {
 			}
 			return closest;
 		}
-		/*
-		private Edge getShortestEdge() {
-			Edge closest = null;
-			double min = Double.MAX_VALUE;
-			for(Edge e : edges) {
-				if (e.distance < min) {
-					min = e.distance;
-					closest = e;
-				}
-			}
-			return closest;
-		}*/
 
 		public DivTree getTree() {return tree;}
 		

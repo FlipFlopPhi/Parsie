@@ -34,17 +34,14 @@ public class ClustererKMeans extends Clusterer {
 		ColoredNode[] centroids = new ColoredNode[k];
 		for(int i=0; i<k; i++) {
 			centroids[i] = coloredNodes.get((r +i*stepDistance) % coloredNodes.size());
-			//centroids[i].cluster.add(centroids[i]);
 		}
 		
 		for(int i=0; i<maxIterations; i++) {
 			for(ColoredNode node : coloredNodes) {
 				ColoredNode centroid = findClosestCentroid(node, centroids);
 				centroid.cluster.add(node);
-				//System.out.println(node.node.getTree().getAddress()+ " has been added to the cluster of "+centroid.node.getTree().getAddress());
 			}
 			for(int j=0; j<centroids.length; j++) {
-				//System.out.println(j+ "  " +centroids[j].node.getTree().getAddress()+ "   "+centroids[j].cluster.size());
 				if (centroids[j].cluster.isEmpty())
 					continue;
 				ColoredNode newCentroid = new ColoredNode(
@@ -56,10 +53,8 @@ public class ClustererKMeans extends Clusterer {
 		for(ColoredNode node : coloredNodes) {
 			ColoredNode centroid = findClosestCentroid(node, centroids);
 			centroid.cluster.add(node);
-			//System.out.println(node.node.getTree().getAddress()+ " has been added to the cluster of "+centroid.node.getTree().getAddress());
 		}
 		for(ColoredNode centroid : centroids) {
-			//Main.showTreeInBrowser(centroid.node.getTree(), "centroid "+Math.random(), false);
 			System.out.println("Saving clustter, containing "+centroid.cluster.size() +" elements.");
 			clusters.add(centroid.cluster);
 		}
