@@ -63,10 +63,16 @@ public class LooseEditComparer extends Comparer{
 		double h = branch0.getHeight() +branch0.getMarginTop() 
 			- (branch1.getHeight() + branch1.getMarginTop());
 		double delta = Math.sqrt(w*w + h*h);
-		double l = Math.sqrt(
+		double l0 = Math.sqrt(
 				Math.pow(branch0.getHeight() + branch0.getMarginTop(),2)
 				+Math.pow(branch0.getWidth() + branch0.getMarginLeft(),2)
 				);
+		double l1 = Math.sqrt(
+				Math.pow(branch1.getHeight() + branch1.getMarginTop(),2)
+				+Math.pow(branch1.getWidth() + branch1.getMarginLeft(),2)
+				);
+		
+		double l = Math.min(l0, l1);
 		return (delta/l);
 	}
 

@@ -105,7 +105,7 @@ public class DistanceMap {
 	
 	public void printPairs() {
 		for(Node n : nodes) {
-			System.out.println(n.tree.getAddress() + " is closest to:");
+			System.out.print(n.tree.getAddress() + " is closest to:");
 			Node var0 = n.getNearestNeighbour();
 			System.out.println("    "+ var0.tree.getAddress());
 		}
