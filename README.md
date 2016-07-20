@@ -7,7 +7,7 @@
   1. Install the latest JDK.
  (2. You can import the second component as a project into eclipse by selecting this map as the project folder.)
 
-#RUNNING
+#Running
  The first component can be used to transfrom web pages from the supplied list into data trees that can be used by the second component. These are saved in the DB.txt file. (This component sometimes crashes once finished. Don't mind this. it's a quirk caused by the library used.)
  The Second component can be used to calculate the distance between the trees that are supplied using the DB.txt file and analyze the results of these.
    
