@@ -48,21 +48,12 @@ public class Main {
         
         Comparer comp = new LooseEditComparer();
         DistanceMap map = new DistanceMap(trees, comp);
+        map.printPairs();
         System.out.println("Distances between the trees have been calculated.");
-        Clusterer clusterAlgorithm = new ClustererKMeans(map, 7, 15, comp);
+        Clusterer clusterAlgorithm = new ClustererKNN(map, 0);
         clusterAlgorithm.cluster();
         System.out.println("Trees have been succesfully clustered.");
         clusterAlgorithm.printClusters();
-        System.out.println("Loading generated websites.");
-        for(int i=0; i < clusterAlgorithm.getAmountOfClusters(); i++) {
-        	DivTree[] cluster = clusterAlgorithm.getCluster(i);
-        	if (cluster.length == 0) {
-        		System.out.println("Cluster "+i+" is empty.");
-        		continue;
-        	}
-        	DivTree average = comp.createAverage(cluster);
-        	showTreeInBrowser(average, ""+i, false);
-        }
         
         System.out.println("Jobs done");
 	}
