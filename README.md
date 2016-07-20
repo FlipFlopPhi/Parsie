@@ -3,6 +3,7 @@
   1. Install python 2.
   2. Install either PyQt or PySide. (These are necessary for the ghost.py library)
   3. Install ghost.py. (This can be done by using "pip install Ghost.py", if you hav epip installed)
+
 ##Java:
   1. Install the latest JDK.
  (2. You can import the second component as a project into eclipse by selecting this map as the project folder.)
